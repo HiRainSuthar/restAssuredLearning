@@ -1,5 +1,6 @@
 import io.restassured.path.json.JsonPath;
 import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class complexJsonParse {
     /*
@@ -15,33 +16,42 @@ public class complexJsonParse {
         JsonPath jsPath = new JsonPath(mockResponse.returnMockResponse());
         //1. Print No of courses returned by API
         int courseSize = jsPath.getInt("courses.size()");
-        System.out.println("value of courseSize is >> "+ courseSize);
+        System.out.println("value of courseSize is >> " + courseSize);
 
         //2.Print Purchase Amount
         int purchaseAmount = jsPath.getInt("dashboard.purchaseAmount");
-        System.out.println("purchase amount is >> "+ purchaseAmount);
+        System.out.println("purchase amount is >> " + purchaseAmount);
 
         //3. Print Title of the first course
         String firstCourseTitle = jsPath.getString("courses[0].title");
-        System.out.println("value of first course title is >> "+ firstCourseTitle);
+        System.out.println("value of first course title is >> " + firstCourseTitle);
 
         //4. Print All course titles and their respective Prices
-        for (int i = 0; i< courseSize; i++) {
-            System.out.println("value of "+i+" course title is >> "+ jsPath.getString("courses["+i+"].title"));
-            System.out.println("value of "+i+" course price is >> "+ jsPath.getString("courses["+i+"].price"));
+        for (int i = 0; i < courseSize; i++) {
+            System.out.println("value of " + i + " course title is >> " + jsPath.getString("courses[" + i + "].title"));
+            System.out.println("value of " + i + " course price is >> " + jsPath.getString("courses[" + i + "].price"));
         }
 
         //5. Print no of copies sold by RPA Course
         int copiesSoldRPA = jsPath.getInt("courses[2].copies");
-        System.out.println("value of copies sold by RPA Cour >> "+ copiesSoldRPA);
+        System.out.println("value of copies sold by RPA Cour >> " + copiesSoldRPA);
+
+        //dynamic code for the same
+        for (int i = 0; i < courseSize; i++) {
+            String courseTitles = jsPath.get("courses[" + i + "].title");
+            if (courseTitles.equalsIgnoreCase("RPA")) {
+                int copies = jsPath.get("courses[" + i + "].copies");
+                System.out.println(copies);
+                break;
+            }
+        }
 
         //6. Verify if Sum of all Course prices matches with Purchase Amount
         int total = 0;
-        for (int i = 0; i< courseSize; i++) {
-            total = total + jsPath.getInt("courses["+i+"].price") *  jsPath.getInt("courses["+i+"].copies");
-
+        for (int i = 0; i < courseSize; i++) {
+            total = total + jsPath.getInt("courses[" + i + "].price") * jsPath.getInt("courses[" + i + "].copies");
         }
-        System.out.println("Value of total is "+ total);
+        System.out.println("Value of total is " + total);
         Assert.assertEquals(purchaseAmount, total);
     }
 }
