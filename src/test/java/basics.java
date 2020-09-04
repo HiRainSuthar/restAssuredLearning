@@ -24,7 +24,7 @@ public class basics {
         String placeId = jpath.getString("place_id");
         System.out.println("value of place_Id is " + placeId);
 
-        String newAddress = "Summer Walk, Bharat";
+        String newAddress = "Mumbai, Bharat";
 
         given().log().all().queryParam("Key", "qaclick123").header("Content-type", "application/json")
                 .body("\"place_id\":\"" + placeId + "\",\n" +
